@@ -2,12 +2,14 @@ const mongoose = require("./dbConnect");
 
 const UserSchema = mongoose.Schema(
   {
-    username: String,
+    username: { type: String },
     password: String,
     age: Number,
   },
   { collection: "user" }
 );
+
+UserSchema.index({ username: "text" }, { unique: true });
 
 const UserModel = mongoose.model("user", UserSchema);
 

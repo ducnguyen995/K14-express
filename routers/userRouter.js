@@ -22,7 +22,11 @@ router.get("/:id", function (req, res) {
 });
 
 router.post("/", function (req, res) {
-  UserModel.create({ username: "Thai23", password: "123", age: 13 })
+  UserModel.create({
+    username: req.body.username,
+    password: req.body.password,
+    age: req.body.age,
+  })
     .then(function (data) {
       res.json(data);
     })
@@ -32,7 +36,14 @@ router.post("/", function (req, res) {
 });
 
 router.put("/:id", function (req, res) {
-  UserModel.updateOne({ username: "Thai" }, { password: "thai123" })
+  UserModel.updateOne(
+    {
+      username: req.body.username,
+      _id: req.params.id,
+      password: req.body.password,
+    },
+    { username: req.body.newPass }
+  )
     .then(function (data) {
       res.json(data);
     })
