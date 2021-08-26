@@ -1,0 +1,50 @@
+npm init 
+
+npm i express
+
+require
+tạo app
+
+app.get('link', function(req,res){
+  res.send('asdasdasd')
+})
+
+res.send()                gui gửi thông điệp ra ngoài, có thẻ gửi html
+
+res.json()                gửi dữ liệu dạng json ra ngoài
+
+res.sendFile()            gửi file lên giao diện, phải là đường dẫn tuyệt đối
+
+mỗi đường dẫn chỉ gửi 1 response
+
+app.use('link',express.static)            gửi 1 folder ra ngoài
+
+tạo port
+
+querry                    gửi data từ client về server qua url
+                          ?key=value&key1=value1
+
+params                    gửi data từ client về server qua url
+                          cài đặt đường dẫn /:tênKey 
+                          đã đặt params là buộc phải dùng đủ
+
+resful API
+
+GET                       render giao diện, 
+                          lấy data
+                          data sẽ được show lên giao diện
+
+POST                      tạo mới data
+                          chức năng khác
+                          data được gửi ngầm
+
+PUT                       Update data
+
+DELETE                    delete data
+
+url                       trong Url có tên bảng mà API tương tác
+                          trong trường hợp findOne, updateOne, deleteOne thì phải cụ thể id trên params
+
+Các API được phân biệt dựa vào method và url
+
+router                    rẽ nhánh giảm tải file app.js
