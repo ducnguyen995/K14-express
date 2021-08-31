@@ -48,3 +48,28 @@ url                       trong Url có tên bảng mà API tương tác
 Các API được phân biệt dựa vào method và url
 
 router                    rẽ nhánh giảm tải file app.js
+
+====================================================
+
+async / await             biến promise thành code chạy đồng bộ
+                          đi liền với nhau
+                          thay thê cho promise
+
+
+async function ten (){
+  try{
+    code chạy đồng bộ
+    const kq = await promise1
+    await promise2 (kq)
+  }
+  catch(err){
+    bắt lỗi
+  }
+}
+
+arrow function            cú pháp tương tự function
+                          this
+
+function ten (a,b,c){}    hoisting hoạt động bt
+
+var ten = (a,b,c) => {}   chỉ dùng đc sau khi gán vào biến, thường dùng trong callback
