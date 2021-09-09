@@ -1,5 +1,8 @@
 const router = require("express").Router();
 const UserModel = require("../models/userModel");
+const BlackListModel = require("../models/blackListModel");
+const jwt = require("jsonwebtoken");
+const checkLogin = require("../middleWare/checkLogin");
 
 router.get("/", (req, res) => {
   UserModel.find()
@@ -11,7 +14,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/pagination", async (req, res) => {
+router.get("/pagination", checkLogin, async (req, res) => {
   try {
     if (req.query.class) {
       const data = await UserModel.find({ class: req.query.class })
@@ -26,6 +29,58 @@ router.get("/pagination", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.json({ error, mess: "server error", status: 500 });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const checkUser = await UserModel.findOne({
+      username: req.body.username,
+      password: req.body.password,
+    });
+    if (checkUser) {
+      const token = jwt.sign({ id: checkUser._id }, "thai", {
+        expiresIn: "30d",
+      });
+      res.json({ status: 200, id: token, mess: "ok" });
+    } else {
+      res.json({ status: 400, mess: "sai username, password" });
+    }
+  } catch (error) {
+    res.json({ error, mess: "server error", status: 500 });
+  }
+});
+
+router.post("/checkLogin", async (req, res) => {
+  try {
+    if (req.cookies.user) {
+      const token = req.cookies.user;
+      const checkToken = await BlackListModel.findOne({ token });
+      if (checkToken) {
+        res.json({ mess: "cookie bị hạn chế", status: 400 });
+      } else {
+        const id = jwt.verify(token, "thai").id;
+        const checkUser = await UserModel.findOne({ _id: id });
+        if (checkUser) {
+          res.json({ mess: "user da dang nhap", status: 200 });
+        } else {
+          res.json({ mess: "cookie khong hop le", status: 400 });
+        }
+      }
+    } else {
+      res.json({ mess: "chua dang nhap", status: 400 });
+    }
+  } catch (error) {
+    res.json({ error, mess: "server error", status: 500 });
+  }
+});
+
+router.post("/logout", async (req, res) => {
+  try {
+    await BlackListModel.create({ token: req.cookies.user });
+    res.json({ status: 200, mess: "ok" });
+  } catch (error) {
     res.json({ error, mess: "server error", status: 500 });
   }
 });
@@ -59,7 +114,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", checkLogin, (req, res) => {
   UserModel.updateOne(
     {
       username: req.body.username,

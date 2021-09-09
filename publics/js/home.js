@@ -101,16 +101,21 @@ async function changePage(page) {
       url: `/user/pagination?page=${page}&size=${pageSize}&class=${classID}`,
       type: "GET",
     });
-    $(".listFriend").html("");
-    data.data.map(function (ele) {
-      const friend = `
-      <div class="friend">
-        <h4>${ele.username} <button onclick='changePass("${ele._id}")'>doi mat khau</button></h4>
-      </div>
-      `;
 
-      $(".listFriend").append(friend);
-    });
+    if (data.status !== 200) {
+      window.location.href = "/login";
+    } else {
+      $(".listFriend").html("");
+      data.data.map(function (ele) {
+        const friend = `
+        <div class="friend">
+          <h4>${ele.username} <button onclick='changePass("${ele._id}")'>doi mat khau</button></h4>
+        </div>
+        `;
+
+        $(".listFriend").append(friend);
+      });
+    }
   } catch (error) {
     console.log(error);
   }
@@ -139,3 +144,35 @@ async function changeClass() {
   }
 }
 render();
+
+$.ajax({
+  url: "/user/checkLogin",
+  type: "POST",
+})
+  .then((data) => {
+    if (data.status !== 200) {
+      window.location.href = "/login";
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+function delete_cookie(name) {
+  document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+}
+
+async function logout() {
+  try {
+    const res = await $.ajax({
+      url: "/user/logout",
+      type: "POST",
+    });
+    if (res.status === 200) {
+      delete_cookie("user");
+      window.location.href = "/login";
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}

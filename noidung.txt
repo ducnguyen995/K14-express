@@ -73,3 +73,11 @@ arrow function            cú pháp tương tự function
 function ten (a,b,c){}    hoisting hoạt động bt
 
 var ten = (a,b,c) => {}   chỉ dùng đc sau khi gán vào biến, thường dùng trong callback
+
+cookie                    bộ nhớ của trình duyệt lưu thông tin do user cung cấp
+                          cookie luôn đc gửi kèm trong req.headers
+
+
+cookie-parser             hỗ trợ chuyển đổi cookie về object
+
+jsonwebtoken              tạo ra chuỗi mã hóa và dịch chuỗi mã hóa thông qua mật khẩu
