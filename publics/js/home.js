@@ -29,7 +29,10 @@ async function render() {
     firstPage.map(function (ele) {
       const friend = `
       <div class="friend">
-        <h4>${ele.username} <button onclick='changePass("${ele._id}")'>doi mat khau</button></h4>
+        <h4>${ele.username} 
+        <button onclick='changePass("${ele._id}")'>doi mat khau</button>
+        <button onclick='deleteUser("${ele._id}")'> delete </button>
+        </h4>
       </div>
       `;
 
@@ -101,13 +104,22 @@ async function changePage(page) {
       url: `/user/pagination?page=${page}&size=${pageSize}&class=${classID}`,
       type: "GET",
     });
-
     if (data.status !== 200) {
       window.location.href = "/login";
     } else {
       $(".listFriend").html("");
       data.data.map(function (ele) {
-        const friend = `
+        const friend =
+          data.role === "admin"
+            ? `
+        <div class="friend">
+          <h4>${ele.username} <button onclick='changePass("${ele._id}")'>doi mat khau</button> 
+          <button onclick='deleteUser("${ele._id}")'> delete </button>
+
+          </h4>
+        </div>
+        `
+            : `
         <div class="friend">
           <h4>${ele.username} <button onclick='changePass("${ele._id}")'>doi mat khau</button></h4>
         </div>
@@ -129,6 +141,7 @@ async function changeClass() {
       url: `/user/pagination?class=${className}&size=${pageSize}&page=1`,
       type: "GET",
     });
+    console.log(135, listUser);
     $(".listFriend").html("");
     listUser.data.map(function (ele) {
       const friend = `
@@ -172,6 +185,21 @@ async function logout() {
       delete_cookie("user");
       window.location.href = "/login";
     }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function deleteUser(id) {
+  try {
+    const response = await $.ajax({
+      type: "DELETE",
+      url: "/user/" + id,
+    });
+
+    alert(response.mess);
+    $(".pageList").html("");
+    render();
   } catch (error) {
     console.log(error);
   }

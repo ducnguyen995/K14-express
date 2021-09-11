@@ -2,7 +2,8 @@ const router = require("express").Router();
 const UserModel = require("../models/userModel");
 const BlackListModel = require("../models/blackListModel");
 const jwt = require("jsonwebtoken");
-const checkLogin = require("../middleWare/checkLogin");
+const bcrypt = require("bcrypt");
+const { checkLogin, checkAdmin } = require("../middleWare/check");
 
 router.get("/", (req, res) => {
   UserModel.find()
@@ -20,12 +21,12 @@ router.get("/pagination", checkLogin, async (req, res) => {
       const data = await UserModel.find({ class: req.query.class })
         .skip((req.query.page - 1) * req.query.size)
         .limit(req.query.size * 1);
-      res.json({ data, status: 200, mess: "ok" });
+      res.json({ data, status: 200, mess: "ok", role: req.role });
     } else {
       const data = await UserModel.find({})
         .skip((req.query.page - 1) * req.query.size)
         .limit(req.query.size * 1);
-      res.json({ data, status: 200, mess: "ok" });
+      res.json({ data, status: 200, mess: "ok", role: req.role });
     }
   } catch (error) {
     console.log(error);
@@ -37,15 +38,22 @@ router.post("/login", async (req, res) => {
   try {
     const checkUser = await UserModel.findOne({
       username: req.body.username,
-      password: req.body.password,
     });
     if (checkUser) {
-      const token = jwt.sign({ id: checkUser._id }, "thai", {
-        expiresIn: "30d",
-      });
-      res.json({ status: 200, id: token, mess: "ok" });
+      const checkPassword = await bcrypt.compare(
+        req.body.password,
+        checkUser.password
+      );
+      if (checkUser) {
+        const token = jwt.sign({ id: checkUser._id }, "thai", {
+          expiresIn: "30d",
+        });
+        res.json({ status: 200, id: token, mess: "ok" });
+      } else {
+        res.json({ status: 400, mess: "sai password" });
+      }
     } else {
-      res.json({ status: 400, mess: "sai username, password" });
+      res.json({ status: 400, mess: "sai username" });
     }
   } catch (error) {
     res.json({ error, mess: "server error", status: 500 });
@@ -101,6 +109,7 @@ router.post("/", async (req, res) => {
     if (checkUser) {
       res.json({ status: 400, mess: "username đã sử dung" });
     } else {
+      req.body.password = await bcrypt.hash(req.body.password, 10);
       await UserModel.create({
         username: req.body.username,
         password: req.body.password,
@@ -129,6 +138,20 @@ router.put("/:id", checkLogin, (req, res) => {
     .catch((err) => {
       res.json(err);
     });
+});
+
+router.delete("/:id", checkLogin, checkAdmin, async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const result = await UserModel.deleteOne({ _id: userId });
+    if (result.deletedCount !== 0) {
+      res.json({ status: 200, mess: "xoa thanh cong" });
+    } else {
+      res.json({ status: 400, mess: "khong tim thay user" });
+    }
+  } catch (error) {
+    res.json({ status: 500, error, mess: "loi server" });
+  }
 });
 
 module.exports = router;

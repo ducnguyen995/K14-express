@@ -81,3 +81,8 @@ cookie                    bộ nhớ của trình duyệt lưu thông tin do use
 cookie-parser             hỗ trợ chuyển đổi cookie về object
 
 jsonwebtoken              tạo ra chuỗi mã hóa và dịch chuỗi mã hóa thông qua mật khẩu
+
+bcrypt                    mã hóa mật khẩu và so sánh, k dịch ngược
+
+middleWare                là những bước sàng lọc trước khi cho phép thực hiện chức năng 
+                          sàng lọc đăng nhập hay chưa, quyền ...

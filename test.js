@@ -1,9 +1,20 @@
-const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
-// const token = jwt.sign({ id: "321654687654654" }, "thai123", { expiresIn: 60 });
-// console.log(token);
-let string =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMyMTY1NDY4NzY1NDY1NCIsImlhdCI6MTYzMTE5MDYxOSwiZXhwIjoxNjMxMTkwNjc5fQ.TDg15R6VQXSZxztfOr-tbDvSf9nmz3ftYrSaj3dw7-8";
+let mk = "thai1230";
 
-const data = jwt.verify(string, "thai123");
-console.log(data);
+bcrypt
+  .compare(mk, "$2b$10$fb8j5zS.OiJD2gPHJMjQO.2JIH3Zt3kIif9UHesGzX/mIlPJBVgvK")
+  .then((data) => {
+    console.log(8, data);
+  })
+  .catch((err) => {
+    console.log(11, err);
+  });
+// bcrypt
+//   .hash(mk, 10)
+//   .then((data) => {
+//     console.log(8, data);
+//   })
+//   .catch((err) => {
+//     console.log(11, err);
+//   });

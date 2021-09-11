@@ -13,6 +13,7 @@ async function checkLogin(req, res, next) {
         const id = jwt.verify(token, "thai").id;
         const checkUser = await UserModel.findOne({ _id: id });
         if (checkUser) {
+          req.role = checkUser.role;
           next();
         } else {
           res.json({ mess: "cookie khong hop le", status: 400 });
@@ -26,4 +27,12 @@ async function checkLogin(req, res, next) {
   }
 }
 
-module.exports = checkLogin;
+async function checkAdmin(req, res, next) {
+  if (req.role === "admin") {
+    next();
+  } else {
+    res.json({ status: 400, mess: "khong co quyen admin" });
+  }
+}
+
+module.exports = { checkLogin, checkAdmin };
