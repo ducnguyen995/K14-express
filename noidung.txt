@@ -86,3 +86,24 @@ bcrypt                    mã hóa mật khẩu và so sánh, k dịch ngược
 
 middleWare                là những bước sàng lọc trước khi cho phép thực hiện chức năng 
                           sàng lọc đăng nhập hay chưa, quyền ...
+
+
+multer                    upload file
+                          form phải có entype='multipart/formdata'
+                          input phải có name
+                          input type='file' phải có name khớp với multer.upload
+
+                          dùng FormData đề gửi request
+                          $.ajax phải có thêm setting
+                          processData: false,
+                          contentType: false,
+
+EJS                       là view engine để làm giao diện hiển thị
+                          app.set('view engine','ejs')
+                          luôn tìm kiếm trong folder views
+                          res.render('folder/file',{data})
+                          cú pháp trong file ejs giống html
+                          có thể tách nhỏ giao diện ra các file riêng để tái sử dụng
+
+<%- %>                    gọi biến và chuyển sang html nếu đc
+<%= %>                    gọi biến 

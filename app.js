@@ -6,6 +6,7 @@ const ClassRouter = require("./routers/classRouter");
 const IndexRouter = require("./routers/indexRouter");
 var cookieParser = require("cookie-parser");
 
+app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
