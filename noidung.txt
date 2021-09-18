@@ -107,3 +107,12 @@ EJS                       là view engine để làm giao diện hiển thị
 
 <%- %>                    gọi biến và chuyển sang html nếu đc
 <%= %>                    gọi biến 
+
+
+=========================================================
+
+mongoAtlas                
+networdk access           0.0.0.0/0
+copylink connect 
+<password>                thay bằng pass của cluster
+myFirstDatabase           thay bằng tên DB của dự án
