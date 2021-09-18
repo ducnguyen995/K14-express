@@ -17,4 +17,4 @@ app.use("/user", UserRouter);
 app.use("/class", ClassRouter);
 app.use("/", IndexRouter);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
