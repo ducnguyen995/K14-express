@@ -8,7 +8,11 @@ function logon() {
     data: { username: username, password: password, age: age },
   })
     .then(function (data) {
-      console.log(data);
+      if(data.status === 200){
+        alert(data.mess)
+      }else {
+        alert(data.mess)
+      }
     })
     .catch(function (err) {
       console.log(err);
