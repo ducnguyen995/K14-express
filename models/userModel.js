@@ -15,15 +15,3 @@ const UserModel = mongoose.model("user", UserSchema);
 
 module.exports = UserModel;
 
-UserModel.create({
-  username: "thai",
-  password: "hello",
-  age: 16,
-  role: "user",
-})
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
